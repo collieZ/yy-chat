@@ -1,0 +1,91 @@
+*{
+
+    margin: 0px;
+    padding: 0px;
+    /* font-size: 0; */
+    box-sizing: border-box;
+}
+
+/* 头部 */
+.header {
+
+    width: 100%;
+    height: 50px;
+    background-color: aquamarine;
+}
+
+.welcome {
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+.welcome span {
+
+    font-size: 20px;
+}
+/* 消息显示 */
+.displayWrapper {
+
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.msgdisplay {
+
+    width: 100%;
+    height: 500px;
+    border: 1px solid black;
+    background-color: rgba(229, 235, 235, 0.842);
+    padding: 10px;
+}
+
+.inputWrapper {
+
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin-top: 20px;
+    float: left;
+}
+
+
+
+/* .innerWrapper {
+
+    display: table;
+    vertical-align: top;
+} */
+
+.textinput {
+
+    /* border-right: none; */
+    border: none;
+
+    
+}
+
+.sendmsgbtn {
+
+    border: none;
+    background-color: white;
+}
+
+.inputblock {
+
+    /* display: inline-block; */
+    float: left;
+    width: 90%;
+}
+
+.sendblock {
+
+    /* display: inline-block; */
+    float: left;
+    width: 10%;
+    height: 100px;
+    vertical-align: top;
+    border: 1px solid gray;
+} 

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/socket.io/2.1.1/socket.io.js"></script>
+    <!-- <link rel="stylesheet" type="" href="index.css"> -->
+    <style>
+        *{
+
+            margin: 0px;
+            padding: 0px;
+            /* font-size: 0; */
+            box-sizing: border-box;
+        }
+
+        /* 头部 */
+        .header {
+
+            width: 100%;
+            height: 50px;
+            background-color: aquamarine;
+        }
+
+        .welcome {
+
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .welcome span {
+
+            font-size: 20px;
+        }
+        /* 消息显示 */
+        .displayWrapper {
+
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .msgdisplay {
+
+            width: 100%;
+            height: 590px;
+            border: 1px solid black;
+            background-color: rgba(229, 235, 235, 0.842);
+            /* margin-left: 50px; */
+            padding: 10px;
+            overflow-y:scroll;
+            /* margin-right: 50px; */
+        }
+
+        .left {
+            /* float: left; */
+            text-align: left;
+            width: 100%;
+            /* height: 80px; */
+            font-size: 22px;
+            padding: 10px;
+        }
+
+        .right {
+            /* float: right; */
+            text-align: right;
+            width: 100%;
+            /* height: 80px; */
+            font-size: 22px;
+            padding: 10px;
+        }
+
+        .inputWrapper {
+
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            /* margin-top: 20px; */
+           
+        }
+
+        /* .innerWrapper {
+
+            display: table;
+            vertical-align: top;
+        } */
+
+        .textinput {
+
+            /* border-right: none; */
+            border: none;
+
+            
+        }
+
+        .sendmsgbtn {
+
+            border: none;
+            background-color: white;
+        }
+
+        .inputblock {
+
+            /* display: inline-block; */
+            float: left;
+            width: 90%;
+        }
+
+        .sendblock {
+
+            /* display: inline-block; */
+            float: left;
+            width: 10%;
+            height: 60px;
+            vertical-align: top;
+            border: 1px solid gray;
+        } 
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div class="header">
+        <div class="welcome">
+            <span>正在进行线上咨询</span>
+        </div>
+    </div>
+    <div class="displayWrapper">
+        <div class="msgdisplay" id="msgshow">
+            <!-- <div class="left">
+                <span>左边文字</span>
+            </div>
+            <div class="right">
+                <span>右边文字</span>
+            </div> -->
+        </div>
+    </div>
+    <div class="inputWrapper">
+            <div class="inputblock">
+                <textarea rows="" cols="" id="inputvalue"  class="textinput" placeholder="请输入要发送的消息" style="width: 100%; height: 60px;"></textarea>
+            </div>
+            <div class="sendblock">
+                <input type="button" id="sendbtn" class="sendmsgbtn" style="width: 100%; height: 60px;" value="发送"></input>
+            </div>  
+    </div>
+
+    <script>
+        // var socket = io.connect("http://localhost:3000");
+        var socket = io.connect("http://yunyao.nat300.top");
+        var sendBtn = document.getElementById("sendbtn");
+        var inputValue = document.getElementById("inputvalue");
+        var msgShow = document.getElementById("msgshow");   // 显示界面
+        var sendFlag = 0;   
+        
+        function displayMsg(msg, dic) {      // 动态生成消息显示
+            
+            var msgBlockDiv = document.createElement("div");
+            if(dic == 1) {
+                msgBlockDiv.setAttribute('class', 'left');
+            }else {
+                msgBlockDiv.setAttribute('class', 'right');
+            }
+            var textSpan = document.createElement('span');
+            textSpan.innerText = msg;
+            msgBlockDiv.appendChild(textSpan);
+            msgShow.appendChild(msgBlockDiv);
+        }
+
+        socket.on("news", function (data) {
+            console.log(data);
+            // socket.emit('other event', "ss");   
+        });
+
+        socket.on("message", function (data) {      // 聊天消息监听事件
+            
+            if(sendFlag == 1) {
+                sendFlag = 0;
+                return;
+            }
+            displayMsg(data, 1);
+            console.log("接收到其他人发来消息：" + data);
+        });
+
+        socket.on("leave", function (data) {   // 断开连接事件监听
+            console.log(data);
+        });
+        
+        sendBtn.onclick = function () {
+            var Val = inputValue.value;
+            socket.send(Val);
+            inputValue.value = "";
+            sendFlag = 1;   // 标志自己发送的消息，过滤广播接收消息
+            displayMsg(Val, 0);      // 自己发送，右边显示
+        }
+        // socket.on("");
+    </script>
+</body>
+</html>
